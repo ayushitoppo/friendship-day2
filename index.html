@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Friendship Day!</title>
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+    }
+
+    body {
+      background-color: #fca5a5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Outer Container */
+    .card-container {
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      height: 520px;
+      background-color: #fffaf0;
+      background-image: 
+        linear-gradient(to right, rgba(200, 200, 200, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(200, 200, 200, 0.25) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 4px solid #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 25px;
+      overflow: hidden;
+    }
+
+    .card-container::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: 140px;
+      height: 140px;
+      background-color: #f87171;
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+      z-index: 1;
+    }
+
+    .card-container::after {
+      content: "";
+      position: absolute;
+      bottom: -30px;
+      right: -30px;
+      width: 140px;
+      height: 140px;
+      background-color: #f87171;
+      border-radius: 60% 40% 30% 70% / 50% 30% 70% 50%;
+      z-index: 1;
+    }
+
+    /* Screen Management */
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 2rem;
+      color: #b91c1c;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.05rem;
+      color: #4b5563;
+      margin-bottom: 15px;
+    }
+
+    /* Custom Letter Styling */
+    .letter-paper {
+      background: #fdf6e3 url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80') center center / cover no-repeat;
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px dashed #d97706;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.1);
+      text-align: left;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #292524;
+      max-height: 340px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+
+    .letter-paper p {
+      margin-bottom: 10px;
+      color: #292524;
+      font-weight: 500;
+    }
+
+    /* Spotify Lyrics Card Styling */
+    .spotify-card {
+      border-radius: 16px;
+      padding: 16px;
+      color: white;
+      text-align: left;
+      width: 90%;
+      max-width: 380px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      margin-bottom: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .spotify-card .song-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .spotify-card .artist {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+
+    .spotify-card .lyrics {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+
+    .spotify-card .spotify-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    /* Images & Stickers */
+    .sticker-img {
+      max-width: 130px;
+      max-height: 130px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      border-radius: 10px;
+    }
+
+    /* Custom Buttons */
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .btn {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background-color: #dc2626;
+    }
+
+    /* Photo Gallery Layout */
+    .polaroid-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 6px 6px 18px 6px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transform: rotate(-3deg);
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .polaroid:nth-child(2) {
+      transform: rotate(2deg);
+    }
+
+    .polaroid:nth-child(3) {
+      transform: rotate(-1deg);
+    }
+
+    .polaroid img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      display: block;
+      border-radius: 2px;
+    }
+
+    .envelope-box {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .envelope-box:hover {
+      transform: scale(1.08);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+
+    <!-- Screen 1: Entrance Question -->
+    <div class="screen active" id="screen-1">
+      <h1>OYEE!</h1>
+      <p>I made something for you.<br><em>Do you want to see?</em></p>
+      <p style="font-size: 4rem; margin: 10px 0;">🐶🌹</p>
+      <div class="btn-group">
+        <button class="btn" onclick="nextScreen(3)">Yes</button>
+        <button class="btn" onclick="nextScreen(2)">No</button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Angry Reaction -->
+    <div class="screen" id="screen-2">
+      <h1>HOW DARE YOU 😡</h1>
+      <img class="sticker-img" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=300&q=80" alt="Playful cat">
+      <button class="btn" onclick="nextScreen(3)">Go back ➔</button>
+    </div>
+
+    <!-- Screen 3: Praise Reaction -->
+    <div class="screen" id="screen-3">
+      <img class="sticker-img" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=300&q=80" alt="Happy kitten">
+      <h1>That's a good friend! 🌻</h1>
+      <button class="btn" onclick="nextScreen(4)">Click here ➔</button>
+    </div>
+
+    <!-- Screen 4: Main Wish -->
+    <div class="screen" id="screen-4">
+      <img class="sticker-img" src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=300&q=80" alt="Cute pet">
+      <h1>HAPPY FRIENDSHIP DAY ❤️</h1>
+      <p>YOU ARE MY FAVORITE NOTIFICATION ✉️<br>STAY CUTE, STAY HAPPY, STAY HEALTHY ✨</p>
+      <button class="btn" onclick="nextScreen(5)">Next ➔</button>
+    </div>
+
+    <!-- Screen 5: Letter Envelope -->
+    <div class="screen" id="screen-5">
+      <div class="envelope-box" onclick="nextScreen(6)">
+        <p style="font-size: 3.5rem; margin-bottom: 0;">✉️🎀</p>
+        <p><strong>Tap here to open my letter</strong></p>
+      </div>
+    </div>
+
+    <!-- Screen 6: Your Personal Letter -->
+    <div class="screen" id="screen-6">
+      <div class="letter-paper">
+        <p>I just wanna thank you for being the most amazing friend I could ever ask for. Thankyou for listening to my stories and random rants. Thankyou for always being there for me when I needed someone to talk.</p>
+        <p>Nothing can express how lucky and grateful I am to have a friend like you. Remember that I am always here if you need a shoulder to lay onto. And sorry if I have ever unknowingly hurt you....</p>
+        <p>Anys wishing all the best for the future ahead of us, hope we get success in our life.....</p>
+        <p>And I love you,</p>
+        <p style="text-align: center; font-weight: bold; color: #b91c1c; margin-top: 10px;">🎀 HAPPY FRIENDSHIP DAY 🎀</p>
+      </div>
+      <button class="btn" onclick="nextScreen(7)">Our Songs ➔</button>
+    </div>
+
+    <!-- Screen 7: Song Lyrics (Spotify Cards) -->
+    <div class="screen" id="screen-7">
+      <div class="spotify-card lyric-slide" id="lyric-1" style="background-color: #2e383f;">
+        <div class="song-title">See You Again (feat. Charlie Puth)</div>
+        <div class="artist">Wiz Khalifa</div>
+        <div class="lyrics">
+          "And what's small turned to a friendship, a friendship turned to a bond<br><br>
+          And that bond will never be broken, the love will never get lost"
+        </div>
+        <div class="spotify-logo"><span>🎵</span> Spotify</div>
+      </div>
+
+      <div class="spotify-card lyric-slide" id="lyric-2" style="background-color: #e0531c; display: none;">
+        <div class="song-title">Best Friend</div>
+        <div class="artist">Brandy</div>
+        <div class="lyrics">
+          "Through the good times and the bad ones<br>
+          Whether I lose or if I win<br>
+          I know one thing that never changes<br>
+          And that's you as my best friend"
+        </div>
+        <div class="spotify-logo"><span>🎵</span> Spotify</div>
+      </div>
+
+      <div class="spotify-card lyric-slide" id="lyric-3" style="background-color: #2a8b8b; display: none;">
+        <div class="song-title">Umbrella</div>
+        <div class="artist">Rihanna, JAY-Z</div>
+        <div class="lyrics">
+          "When the sun shine, we shine together<br>
+          Told you I'll be here forever<br>
+          Said I'll always be your friend<br>
+          Took an oath, I'ma stick it out to the end"
+        </div>
+        <div class="spotify-logo"><span>🎵</span> Spotify</div>
+      </div>
+
+      <div class="spotify-card lyric-slide" id="lyric-4" style="background-color: #d65d5d; display: none;">
+        <div class="song-title">You Get Me So High</div>
+        <div class="artist">The Neighbourhood</div>
+        <div class="lyrics">
+          "Used to stick together<br>
+          You're my best friend, I'll love you forever"
+        </div>
+        <div class="spotify-logo"><span>🎵</span> Spotify</div>
+      </div>
+
+      <div class="spotify-card lyric-slide" id="lyric-5" style="background-color: #438f7d; display: none;">
+        <div class="song-title">Traveling Song</div>
+        <div class="artist">Ryn Weaver</div>
+        <div class="lyrics">
+          "Soulmates aren't just lovers, you know? I know, I know"
+        </div>
+        <div class="spotify-logo"><span>🎵</span> Spotify</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn" style="padding: 8px 15px; font-size: 0.9rem;" onclick="cycleLyrics()">Next Song 🎵</button>
+        <button class="btn" style="padding: 8px 15px; font-size: 0.9rem;" onclick="nextScreen(8)">Continue ➔</button>
+      </div>
+    </div>
+
+    <!-- Screen 8: Photo Memories with Direct Image Links -->
+    <div class="screen" id="screen-8">
+      <div class="polaroid-container">
+        <a href="https://pin.it/12rxxcrAt" target="_blank" class="polaroid">
+          <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=300&q=80" alt="Memory 1">
+        </a>
+        <a href="https://pin.it/1zziBp1oj" target="_blank" class="polaroid">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=300&q=80" alt="Memory 2">
+        </a>
+        <a href="https://pin.it/5T07DVBnU" target="_blank" class="polaroid">
+          <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80" alt="Memory 3">
+        </a>
+      </div>
+      <h1>I LOVE YOU 💕</h1>
+      <p>Tap a photo frame to open on Pinterest!</p>
+      <button class="btn" onclick="nextScreen(9)">Click for Surprise ➔</button>
+    </div>
+
+    <!-- Screen 9: Gift Box Surprise -->
+    <div class="screen" id="screen-9">
+      <h1>Here's a surprise for you!</h1>
+      <div class="envelope-box" onclick="nextScreen(10)" style="margin-top: 15px;">
+        <p style="font-size: 4rem; margin-bottom: 0;">🎁</p>
+        <p><strong>Tap here</strong></p>
+      </div>
+    </div>
+
+    <!-- Screen 10: Final Rant Guarantee Message -->
+    <div class="screen" id="screen-10">
+      <img class="sticker-img" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=300&q=80" alt="Cute cat">
+      <h1>Lifetime Guarantee 📜</h1>
+      <p style="font-size: 1.1rem; color: #991b1b; max-width: 85%;">
+        I give you a lifetime guarantee that I will always listen to your rants! 💖✨
+      </p>
+      <button class="btn" onclick="nextScreen(1)">Replay 🔄</button>
+    </div>
+
+  </div>
+
+  <script>
+    function nextScreen(screenNumber) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(screen => screen.classList.remove('active'));
+      
+      const targetScreen = document.getElementById(`screen-${screenNumber}`);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+      }
+    }
+
+    let currentLyric = 1;
+    const totalLyrics = 5;
+
+    function cycleLyrics() {
+      document.getElementById(`lyric-${currentLyric}`).style.display = 'none';
+      currentLyric = (currentLyric % totalLyrics) + 1;
+      document.getElementById(`lyric-${currentLyric}`).style.display = 'block';
+    }
+  </script>
+</body>
+</html>
